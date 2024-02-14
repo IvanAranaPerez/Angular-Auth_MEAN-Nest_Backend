@@ -3,7 +3,6 @@ import { environment } from '../../../environments/environments';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { AuthStatus, CheckTokenResponse, LoginResponse, User } from '../interfaces';
-import { error } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +45,16 @@ export class AuthService {
       catchError( err =>  throwError( () => err.error.message )
       )
 
+    );
+  }
+
+  signup( email: string, name: string, password: string): Observable<string> {
+    const url = `${this.baseURL}/auth/register`;
+    const body = {email: email, name:name, password:password};
+
+    return this.http.post<User>(url, body).pipe(
+      map(() => 'Registro exitoso'),
+      catchError(err => throwError(() => err.error.message))
     );
   }
 
